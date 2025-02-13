@@ -6,10 +6,14 @@ router.get("/", (_req, res) => {
   });
 });
 
-router.get("/health", (req, res) => {
+router.get("/health", (_req, res) => {
   res.status(200).json({
     message: "server health is good",
   });
+});
+
+router.get("/favicon.ico", (_req, res) => {
+  res.status(204).end(); // No content
 });
 
 module.exports = router;

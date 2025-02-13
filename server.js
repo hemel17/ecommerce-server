@@ -10,7 +10,7 @@ const connectDB = require("./db");
 (async () => {
   try {
     await connectDB(dbUrl);
-    console.log("database is connected");
+    console.log("mongoDB is connected");
     server.listen(port, () => {
       console.log(`server is running at port : ${port}`);
     });
