@@ -23,6 +23,29 @@ const register = async (req, res, next) => {
   }
 };
 
-// todo : logout
+// * logout
+const login = async (req, res, next) => {
+  const { email, password } = req.body;
 
-module.exports = { register };
+  if (!email || !password) {
+    return res.status(400).json({
+      message: "Invalid credentials!",
+    });
+  }
+
+  try {
+    const { token, payload } = await authService.loginService(email, password);
+
+    res
+      .cookie("token", token, { httpOnly: true, secure: false })
+      .status(200)
+      .json({
+        message: "Login successful",
+        payload,
+      });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { register, login };
