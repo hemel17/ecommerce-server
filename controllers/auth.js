@@ -1,7 +1,5 @@
 const authService = require("../services/auth");
 
-// todo : login
-
 // * register
 const register = async (req, res, next) => {
   const { name, email, password } = req.body;
@@ -15,7 +13,7 @@ const register = async (req, res, next) => {
   try {
     const user = await authService.registerService(name, email, password);
     res.status(201).json({
-      message: "user registered successfully",
+      message: "User registered successfully",
       user,
     });
   } catch (error) {
@@ -23,7 +21,7 @@ const register = async (req, res, next) => {
   }
 };
 
-// * logout
+// * login
 const login = async (req, res, next) => {
   const { email, password } = req.body;
 
@@ -41,11 +39,22 @@ const login = async (req, res, next) => {
       .status(200)
       .json({
         message: "Login successful",
-        payload,
+        user: payload,
       });
   } catch (error) {
     next(error);
   }
 };
 
-module.exports = { register, login };
+// todo : logout
+const logout = async (_req, res, next) => {
+  try {
+    res.clearCookie("token").json({
+      message: "Successfully logged out!",
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { register, login, logout };

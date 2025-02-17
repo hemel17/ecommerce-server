@@ -9,7 +9,7 @@ const registerService = async (name, email, password) => {
   const user = await userService.findUserByProperty("email", email);
 
   if (user) {
-    throw error("User already exists!", 400);
+    throw error("User already registered!", 400);
   }
 
   const hash = await hashPassword(password);
