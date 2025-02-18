@@ -13,6 +13,7 @@ const register = async (req, res, next) => {
   try {
     const user = await authService.registerService(name, email, password);
     res.status(201).json({
+      success: true,
       message: "User registered successfully",
       user,
     });
@@ -38,6 +39,7 @@ const login = async (req, res, next) => {
       .cookie("token", token, { httpOnly: true, secure: false })
       .status(200)
       .json({
+        success: true,
         message: "Login successful",
         user: payload,
       });

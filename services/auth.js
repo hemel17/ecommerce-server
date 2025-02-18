@@ -36,7 +36,7 @@ const loginService = async (email, password) => {
     role: user.role,
   };
 
-  const token = jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: "2h" });
+  const token = jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: "36h" });
 
   return { token, payload };
 };
