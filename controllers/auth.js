@@ -1,12 +1,13 @@
 const authService = require("../services/auth");
 
-// * register
+// * Register
 const register = async (req, res, next) => {
   const { name, email, password } = req.body;
 
   if (!name || !email || !password) {
     return res.status(400).json({
-      message: "Invalid credentials!",
+      success: false,
+      message: "All fields are required: name, email, and password",
     });
   }
 
@@ -22,13 +23,14 @@ const register = async (req, res, next) => {
   }
 };
 
-// * login
+// * Login
 const login = async (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
     return res.status(400).json({
-      message: "Invalid credentials!",
+      success: false,
+      message: "Email and password are required",
     });
   }
 
@@ -36,7 +38,11 @@ const login = async (req, res, next) => {
     const { token, payload } = await authService.loginService(email, password);
 
     res
-      .cookie("token", token, { httpOnly: true, secure: false })
+      .cookie("token", token, {
+        httpOnly: true,
+        secure: false,
+        maxAge: 24 * 60 * 60 * 1000,
+      })
       .status(200)
       .json({
         success: true,
@@ -48,15 +54,22 @@ const login = async (req, res, next) => {
   }
 };
 
-// todo : logout
-const logout = async (_req, res, next) => {
-  try {
-    res.clearCookie("token").json({
-      message: "Successfully logged out!",
-    });
-  } catch (error) {
-    next(error);
-  }
+// * Logout
+const logout = (_req, res) => {
+  res.clearCookie("token").status(200).json({
+    success: true,
+    message: "Successfully logged out!",
+  });
 };
 
-module.exports = { register, login, logout };
+// * Check Authentication
+const checkAuth = (req, res) => {
+  const user = req.user;
+  res.status(200).json({
+    success: true,
+    message: "Authenticated user!",
+    user,
+  });
+};
+
+module.exports = { register, login, logout, checkAuth };

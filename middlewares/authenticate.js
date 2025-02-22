@@ -1,12 +1,12 @@
 require("dotenv").config();
-const error = require("../utils/error");
 const jwt = require("jsonwebtoken");
 
 const authenticate = async (req, res, next) => {
   const token = req.cookies.token;
 
   if (!token) {
-    res.status(401).json({
+    return res.status(401).json({
+      success: false,
       message: "Unauthorized user!",
     });
   }
@@ -15,8 +15,8 @@ const authenticate = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.SECRET_KEY);
     req.user = decoded;
     next();
-  } catch (error) {
-    res.status(401).json({
+  } catch (err) {
+    return res.status(401).json({
       success: false,
       message: "Unauthorized user!",
     });
